@@ -1,0 +1,123 @@
+.products-container {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+  
+  .filter-sidebar {
+    flex: 1;
+    max-width: 250px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+  }
+  
+  .filter-group {
+    margin-bottom: 20px;
+  }
+  
+  .filter-item {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .filter-toggle-btn,
+.apply-filter-btn {
+  background-color: #de4387;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  width: 100%;
+  font-weight: bold;
+}
+
+.filter-toggle-btn:hover,
+.apply-filter-btn:hover {
+  background-color: #c82c6e;
+}
+  
+  .scrollable-filter {
+    max-height: 150px;
+    overflow-y: auto;
+    padding-right: 10px;
+  }
+  
+  .scrollable-filter::-webkit-scrollbar {
+    width: 5px;
+  }
+  
+  .scrollable-filter::-webkit-scrollbar-thumb {
+    background-color: #c9809f;
+    border-radius: 10px;
+  }
+  
+  .filter-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  
+  .products-list {
+    flex: 4;
+  }
+  
+  .product-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  
+  .product-details {
+    text-align: left;
+    margin-left: 20px;
+    margin-top: 30px;
+  }
+  
+  .product-title {
+    font-size: 20px;
+    font-weight: bold;
+  }
+  
+  .pagination {
+    margin-top: 20px;
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .pagination button {
+    padding: 8px 12px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+  }
+  
+  .pagination button.active {
+    background-color: #de4387;
+    color: white;
+  }
+  
+  @media (max-width: 768px) {
+    .products-container {
+      flex-direction: column;
+    }
+  
+    .filter-sidebar {
+      width: 100%;
+      margin-bottom: 20px;
+      position: static;
+    }
+  }
+  

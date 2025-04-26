@@ -1,31 +1,124 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { productData } from "../product";
+import { FaStar } from "react-icons/fa";
+import "./ProductList.css";
 
 const ProductList = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const selectedCategory = location.state?.category || "All";
+  const selectedCategoryFromState = location.state?.category || "All";
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    selectedCategoryFromState,
+  );
+  const [selectedSizes, setSelectedSizes] = useState([]);
+  const [selectedRatings, setSelectedRatings] = useState([]);
+  const [priceRange, setPriceRange] = useState(0);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortOption, setSortOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(6);
+
+  const [isMobile, setIsMobile] = useState(false);
+  const [showFilters, setShowFilters] = useState(false);
+  const [filtersApplied, setFiltersApplied] = useState(true);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    handleResize();
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const handleProductClick = (product) => {
     navigate("/productsDetails", { state: { product } });
   };
 
-  // Group products by category
-  const groupedProducts = productData.reduce((groups, product) => {
-    const category = product.category || "Uncategorized";
-    if (!groups[category]) {
-      groups[category] = [];
-    }
-    groups[category].push(product);
-    return groups;
-  }, {});
+  const categories = ["All", ...new Set(productData.map((p) => p.category))];
+  const sizes = ["All", "XS", "S", "M", "L", "XL", "XXL"];
 
-  // If specific category is selected, only show that
-  const categoriesToDisplay =
-    selectedCategory === "All"
-      ? Object.keys(groupedProducts)
-      : [selectedCategory];
+  const handleSizeChange = (size) => {
+    if (size === "All") {
+      setSelectedSizes([]);
+    } else {
+      setSelectedSizes((prev) =>
+        prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size],
+      );
+    }
+  };
+
+  const handleRatingChange = (rating) => {
+    setSelectedRatings((prev) =>
+      prev.includes(rating)
+        ? prev.filter((r) => r !== rating)
+        : [...prev, rating],
+    );
+  };
+
+  const handlePriceChange = (e) => {
+    setPriceRange(parseInt(e.target.value));
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchTerm(e.target.value);
+  };
+
+  const handleSortChange = (e) => {
+    setSortOption(e.target.value);
+  };
+
+  let filteredProducts = productData
+    .filter((product) =>
+      selectedCategory === "All" ? true : product.category === selectedCategory,
+    )
+    .filter((product) =>
+      selectedSizes.length > 0 ? selectedSizes.includes(product.size) : true,
+    )
+    .filter((product) =>
+      selectedRatings.length > 0
+        ? selectedRatings.includes(product.rating)
+        : true,
+    )
+    .filter((product) =>
+      priceRange > 0
+        ? parseInt(product.price.replace(/[^\d]/g, "")) <= priceRange
+        : true,
+    )
+    .filter((product) =>
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()),
+    );
+
+  if (sortOption === "priceLowHigh") {
+    filteredProducts.sort(
+      (a, b) =>
+        parseInt(a.price.replace(/[^\d]/g, "")) -
+        parseInt(b.price.replace(/[^\d]/g, "")),
+    );
+  } else if (sortOption === "priceHighLow") {
+    filteredProducts.sort(
+      (a, b) =>
+        parseInt(b.price.replace(/[^\d]/g, "")) -
+        parseInt(a.price.replace(/[^\d]/g, "")),
+    );
+  } else if (sortOption === "ratingHighLow") {
+    filteredProducts.sort((a, b) => b.rating - a.rating);
+  } else if (sortOption === "ratingLowHigh") {
+    filteredProducts.sort((a, b) => a.rating - b.rating);
+  }
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
 
   return (
     <section id='services' className='services section light-background'>
@@ -34,52 +127,170 @@ const ProductList = () => {
         <h2 style={{ color: "#de4387" }}>Our Products</h2>
       </div>
 
-      <div className='container-sm'>
-        <h4>Showing: {selectedCategory} Products</h4>
+      <div className='container-sm products-container'>
+        {isMobile && !showFilters && (
+          <button
+            className='filter-toggle-btn'
+            onClick={() => {
+              setShowFilters(true);
+              setFiltersApplied(false);
+            }}>
+            Show Filters
+          </button>
+        )}
 
-        {categoriesToDisplay.map((category, catIndex) => (
-          <div key={catIndex} style={{ marginBottom: "40px" }}>
-            <h3 style={{ marginTop: 20, color: "#19A2A9" }}>{category}</h3>
-            <div className='row gy-4'>
-              {groupedProducts[category]?.map((product, index) => (
-                <div
-                  className='col-lg-4 col-md-6 col-6'
-                  data-aos='fade-up'
-                  data-aos-delay={100 * (index + 1)}
-                  onClick={() => handleProductClick(product)}
-                  key={index}>
-                  <div className='service-item position-relative'>
-                    <div>
+        {(showFilters || !isMobile) && (
+          <div className='filter-sidebar'>
+            <div className='filter-group'>
+              <input
+                type='text'
+                placeholder='Search Products...'
+                value={searchTerm}
+                onChange={handleSearchChange}
+                className='filter-input'
+              />
+            </div>
+
+            <div className='filter-group'>
+              <select
+                value={sortOption}
+                onChange={handleSortChange}
+                className='filter-input'>
+                <option value=''>Sort By</option>
+                <option value='priceLowHigh'>Price: Low to High</option>
+                <option value='priceHighLow'>Price: High to Low</option>
+                <option value='ratingHighLow'>Rating: High to Low</option>
+                <option value='ratingLowHigh'>Rating: Low to High</option>
+              </select>
+            </div>
+
+            <div className='filter-group'>
+              <h5>Category</h5>
+              <div className='scrollable'>
+                {categories.map((cat, index) => (
+                  <div className='filter-item' key={index}>
+                    <label>
+                      <input
+                        type='radio'
+                        checked={selectedCategory === cat}
+                        onChange={() => setSelectedCategory(cat)}
+                        name='category'
+                      />
+                      {cat}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className='filter-group'>
+              <h5>Size</h5>
+              <div className='scrollable'>
+                {sizes.map((size, index) => (
+                  <div className='filter-item' key={index}>
+                    <label>
+                      <input
+                        type='checkbox'
+                        checked={selectedSizes.includes(size)}
+                        onChange={() => handleSizeChange(size)}
+                      />
+                      {size}
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div className='filter-group'>
+              <h5>Ratings</h5>
+              {Array.from({ length: 5 }, (_, i) => 5 - i).map((rating) => (
+                <div className='filter-item' key={rating}>
+                  <label
+                    style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                    <input
+                      type='checkbox'
+                      checked={selectedRatings.includes(rating)}
+                      onChange={() => handleRatingChange(rating)}
+                    />
+                    {Array(rating)
+                      .fill()
+                      .map((_, idx) => (
+                        <FaStar key={idx} style={{ color: "#FFD700" }} />
+                      ))}
+                  </label>
+                </div>
+              ))}
+            </div>
+
+            <div className='filter-group'>
+              <h5>Price Range: ₹0 - ₹{priceRange}</h5>
+              <input
+                type='range'
+                min='0'
+                max='5000'
+                step='100'
+                value={priceRange}
+                onChange={handlePriceChange}
+                style={{ width: "100%" }}
+              />
+            </div>
+
+            {isMobile && (
+              <button
+                className='apply-filter-btn'
+                onClick={() => {
+                  setShowFilters(false);
+                  setFiltersApplied(true);
+                }}>
+                Apply
+              </button>
+            )}
+          </div>
+        )}
+
+        <div className='products-list'>
+          {!isMobile || (!showFilters && filtersApplied) ? (
+            currentProducts.length > 0 ? (
+              <div className='row gy-4'>
+                {currentProducts.map((product, index) => (
+                  <div
+                    className='col-lg-4 col-md-6 col-6'
+                    data-aos='fade-up'
+                    data-aos-delay={100 * (index + 1)}
+                    onClick={() => handleProductClick(product)}
+                    key={index}>
+                    <div className='service-item position-relative'>
                       <img
                         src={product.icon}
                         alt={product.title}
-                        style={{
-                          width: "100%",
-                          height: "auto",
-                          objectFit: "cover",
-                        }}
+                        className='product-image'
                       />
-                    </div>
-                    <div
-                      style={{
-                        textAlign: "left",
-                        marginLeft: 20,
-                        marginTop: 30,
-                      }}>
-                      <p style={{ fontSize: 20 }}>
-                        <b>{product.title}</b>
-                      </p>
-                      <p>{product.category}</p>
-                      <p>{product.price}</p>
+                      <div className='product-details'>
+                        <p className='product-title'>{product.title}</p>
+                        <p>{product.category}</p>
+                        <p>{product.price}</p>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-              {groupedProducts[category]?.length === 0 && (
-                <p>No products in this category.</p>
-              )}
-            </div>
-          </div>
+                ))}
+              </div>
+            ) : (
+              <h5>No Products Found.</h5>
+            )
+          ) : (
+            <h5>Please Apply Filters to View Products</h5>
+          )}
+        </div>
+      </div>
+      {/* Pagination */}
+      <div className='pagination'>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+          <button
+            key={num}
+            onClick={() => paginate(num)}
+            className={`page-btn ${currentPage === num ? "active" : ""}`}>
+            {num}
+          </button>
         ))}
       </div>
     </section>

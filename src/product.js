@@ -16,6 +16,8 @@ export const productData = [
       "Elegant South Indian cotton kurti featuring traditional Kanchipuram motifs. Ideal for festive and daily ethnic wear.",
     category: "Kurti",
     price: "₹999.00",
+    size: "M",
+    rating: 5,
   },
   {
     icon: Product2,
@@ -25,6 +27,8 @@ export const productData = [
       "Graceful handloom saree with a classic temple border design. Perfect blend of tradition and style for any occasion.",
     category: "Saree",
     price: "₹2499.00",
+    size: "Free Size",
+    rating: 4,
   },
   {
     icon: Product3,
@@ -34,6 +38,8 @@ export const productData = [
       "Soft mull cotton salwar kameez set with pastel floral prints. Lightweight and comfortable for hot climates.",
     category: "Salwar Kameez",
     price: "₹1499.00",
+    size: "L",
+    rating: 5,
   },
   {
     icon: Product4,
@@ -43,6 +49,8 @@ export const productData = [
       "Tailor-made blouse stitching service with your choice of embroidery, piping, and patterns. Celebrate tradition your way.",
     category: "Customized",
     price: "₹799.00",
+    size: "Custom",
+    rating: 5,
   },
   {
     icon: Product5,
@@ -52,6 +60,8 @@ export const productData = [
       "Handblock printed dupatta with traditional Annam bird patterns in earthy tones. A beautiful addition to any ethnic outfit.",
     category: "Dupatta",
     price: "₹699.00",
+    size: "Free Size",
+    rating: 3,
   },
   {
     icon: Product6,
@@ -61,6 +71,8 @@ export const productData = [
       "Vibrant Chettinad cotton saree with contrast borders and authentic patterns. Lightweight and easy to drape.",
     category: "Saree",
     price: "₹1999.00",
+    size: "Free Size",
+    rating: 4,
   },
   {
     icon: Product7,
@@ -70,6 +82,8 @@ export const productData = [
       "Rich Mysore silk kurti with zari detailing. A regal touch for your festive wardrobe.",
     category: "Kurti",
     price: "₹1899.00",
+    size: "M",
+    rating: 4,
   },
   {
     icon: Product8,
@@ -79,5 +93,7 @@ export const productData = [
       "Get your ethnic wear personalized with name embroidery. Perfect for gifting or adding a personal touch.",
     category: "Customized",
     price: "₹499.00",
+    size: "Custom",
+    rating: 5,
   },
 ];
