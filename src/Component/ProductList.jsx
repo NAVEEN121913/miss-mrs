@@ -165,7 +165,7 @@ const ProductList = () => {
             </div>
 
             <div className='filter-group'>
-              <h5>Category</h5>
+              <p style={{ fontSize: 18, fontWeight: "bold" }}>Category</p>
               <div className='scrollable'>
                 {categories.map((cat, index) => (
                   <div className='filter-item' key={index}>
@@ -175,7 +175,7 @@ const ProductList = () => {
                         checked={selectedCategory === cat}
                         onChange={() => setSelectedCategory(cat)}
                         name='category'
-                      />
+                      />{" "}
                       {cat}
                     </label>
                   </div>
@@ -184,7 +184,7 @@ const ProductList = () => {
             </div>
 
             <div className='filter-group'>
-              <h5>Size</h5>
+              <p style={{ fontSize: 18, fontWeight: "bold" }}>Size</p>
               <div className='scrollable'>
                 {sizes.map((size, index) => (
                   <div className='filter-item' key={index}>
@@ -193,7 +193,7 @@ const ProductList = () => {
                         type='checkbox'
                         checked={selectedSizes.includes(size)}
                         onChange={() => handleSizeChange(size)}
-                      />
+                      />{" "}
                       {size}
                     </label>
                   </div>
@@ -202,7 +202,7 @@ const ProductList = () => {
             </div>
 
             <div className='filter-group'>
-              <h5>Ratings</h5>
+              <p style={{ fontSize: 18, fontWeight: "bold" }}>Ratings</p>
               {Array.from({ length: 5 }, (_, i) => 5 - i).map((rating) => (
                 <div className='filter-item' key={rating}>
                   <label
@@ -223,7 +223,9 @@ const ProductList = () => {
             </div>
 
             <div className='filter-group'>
-              <h5>Price Range: ₹0 - ₹{priceRange}</h5>
+              <p style={{ fontSize: 18, fontWeight: "bold" }}>
+                Price Range: ₹0 - ₹{priceRange}
+              </p>
               <input
                 type='range'
                 min='0'
