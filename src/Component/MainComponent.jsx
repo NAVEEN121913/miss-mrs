@@ -7,8 +7,8 @@ import HomeProductPreview from "./HomeProduct";
 const MainComponent = () => {
   return (
     <>
-      {/* <Carousel /> */}
-      <BannerWithOverlay />
+      <Carousel />
+      {/* <BannerWithOverlay /> */}
       {/* <ProductList products={productData} /> */}
       {/* <ProductList /> */}
       <HomeProductPreview />

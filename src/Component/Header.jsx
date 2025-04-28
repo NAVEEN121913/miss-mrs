@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { productData } from "../product";
 import { useNavigate } from "react-router-dom";
-import Logo from "../assets/new_logo.png";
+import Logo from "../assets/logo_new_mmc.jpg";
 import "../App.css";
 
 const Header = () => {
@@ -50,6 +50,9 @@ const Header = () => {
             src='https://wandinfotech.s3.us-east-1.amazonaws.com/logo/logo+miss+and+mrs.jpg'
             alt='Logo'
           />
+          <div>
+            <img src={Logo} alt='Logo' width={300} />
+          </div>
         </a>
         <nav id='navmenu' className='navmenu'>
           <ul>
