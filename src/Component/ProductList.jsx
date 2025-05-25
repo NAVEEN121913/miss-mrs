@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { productData } from "../product";
 import { FaStar } from "react-icons/fa";
+import { db } from "../firebase"; // make sure this path is correct
+import { ref, onValue } from "firebase/database";
 import "./ProductList.css";
 
 const ProductList = () => {
@@ -9,6 +10,7 @@ const ProductList = () => {
   const location = useLocation();
   const selectedCategoryFromState = location.state?.category || "All";
 
+  const [productData, setProductData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(
     selectedCategoryFromState,
   );
@@ -19,10 +21,22 @@ const ProductList = () => {
   const [sortOption, setSortOption] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [productsPerPage] = useState(6);
-
   const [isMobile, setIsMobile] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filtersApplied, setFiltersApplied] = useState(true);
+
+  useEffect(() => {
+    const productsRef = ref(db, "products");
+    onValue(productsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const loadedProducts = Object.values(data);
+        setProductData(loadedProducts);
+      } else {
+        setProductData([]);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -284,7 +298,7 @@ const ProductList = () => {
           )}
         </div>
       </div>
-      {/* Pagination */}
+
       <div className='pagination'>
         {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
           <button

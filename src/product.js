@@ -1,19 +1,6 @@
-import Product1 from "./assets/product/Product1.jpg";
-import Product2 from "./assets/product/Product2.jpg";
-import Product3 from "./assets/product/Product3.jpg";
-import Product4 from "./assets/product/Product4.jpg";
-import Product5 from "./assets/product/Product5.jpg";
-import Product6 from "./assets/product/Product6.jpg";
-import Product7 from "./assets/product/Product7.jpg";
-import Product8 from "./assets/product/Product8.jpg";
-
-import AltImg1 from "./assets/product/AltImg1.png";
-import AltImg2 from "./assets/product/AltImg2.png";
-import AltImg3 from "./assets/product/AltImg3.png";
-
 export const productData = [
   {
-    icon: Product1,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product1.jpg",
     productCode: 1,
     title: "Kanchipuram Cotton Kurti",
     description:
@@ -22,10 +9,13 @@ export const productData = [
     price: "₹999.00",
     size: ["S", "M", "L", "XL"],
     rating: 5,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Maroon", colorCode: "#800000" },
+      { colorName: "Olive Green", colorCode: "#556B2F" },
+    ],
   },
   {
-    icon: Product2,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product2.jpg",
     productCode: 2,
     title: "Temple Border Saree",
     description:
@@ -34,10 +24,13 @@ export const productData = [
     price: "₹2499.00",
     size: ["Free Size"],
     rating: 4,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Rust", colorCode: "#B7410E" },
+      { colorName: "Beige", colorCode: "#F5F5DC" },
+    ],
   },
   {
-    icon: Product3,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product3.jpg",
     productCode: 3,
     title: "Mull Cotton Salwar Set",
     description:
@@ -46,10 +39,13 @@ export const productData = [
     price: "₹1499.00",
     size: ["M", "L", "XL"],
     rating: 5,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Peach", colorCode: "#FFDAB9" },
+      { colorName: "Sky Blue", colorCode: "#87CEEB" },
+    ],
   },
   {
-    icon: Product4,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product4.jpg",
     productCode: 4,
     title: "Personalized Blouse Stitching",
     description:
@@ -58,10 +54,13 @@ export const productData = [
     price: "₹799.00",
     size: ["Custom"],
     rating: 5,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Gold", colorCode: "#FFD700" },
+      { colorName: "Black", colorCode: "#000000" },
+    ],
   },
   {
-    icon: Product5,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product5.jpg",
     productCode: 5,
     title: "Annam Handblock Dupatta",
     description:
@@ -70,10 +69,13 @@ export const productData = [
     price: "₹699.00",
     size: ["Free Size"],
     rating: 3,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Brown", colorCode: "#8B4513" },
+      { colorName: "Ivory", colorCode: "#FFFFF0" },
+    ],
   },
   {
-    icon: Product6,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product6.jpg",
     productCode: 6,
     title: "Chettinad Cotton Saree",
     description:
@@ -82,10 +84,13 @@ export const productData = [
     price: "₹1999.00",
     size: ["Free Size"],
     rating: 4,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Magenta", colorCode: "#FF00FF" },
+      { colorName: "Navy Blue", colorCode: "#000080" },
+    ],
   },
   {
-    icon: Product7,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product7.jpg",
     productCode: 7,
     title: "Mysore Silk Kurti",
     description:
@@ -94,10 +99,13 @@ export const productData = [
     price: "₹1899.00",
     size: ["S", "M", "L"],
     rating: 4,
-    alternativeImages: [],
+    colorVariants: [
+      { colorName: "Purple", colorCode: "#800080" },
+      { colorName: "Teal", colorCode: "#008080" },
+    ],
   },
   {
-    icon: Product8,
+    icon: "https://wandinfotech.s3.us-east-1.amazonaws.com/product/Product8.jpg",
     productCode: 8,
     title: "Custom Name Embroidery Set",
     description:
@@ -106,6 +114,10 @@ export const productData = [
     price: "₹499.00",
     size: ["Custom"],
     rating: 5,
-    alternativeImages: [AltImg1, AltImg2, AltImg3],
+    colorVariants: [
+      { colorName: "White", colorCode: "#FFFFFF" },
+      { colorName: "Lavender", colorCode: "#E6E6FA" },
+      { colorName: "Mint Green", colorCode: "#98FF98" },
+    ],
   },
 ];

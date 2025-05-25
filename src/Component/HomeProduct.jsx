@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { productData } from "../product";
 import { FaStar } from "react-icons/fa";
+import { db } from "../firebase"; // Firebase config import
+import { ref, onValue } from "firebase/database";
 import "./ProductList.css";
 
 const HomeProductPreview = () => {
@@ -9,6 +10,7 @@ const HomeProductPreview = () => {
   const location = useLocation();
   const selectedCategoryFromState = location.state?.category || "All";
 
+  const [productData, setProductData] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(
     selectedCategoryFromState,
   );
@@ -17,9 +19,24 @@ const HomeProductPreview = () => {
   const [priceRange, setPriceRange] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [sortOption, setSortOption] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [productsPerPage] = useState(6);
   const [isMobile, setIsMobile] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [filtersApplied, setFiltersApplied] = useState(true);
+
+  useEffect(() => {
+    const productsRef = ref(db, "products");
+    onValue(productsRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const productsArray = Object.values(data);
+        setProductData(productsArray);
+      } else {
+        setProductData([]);
+      }
+    });
+  }, []);
 
   useEffect(() => {
     const handleResize = () => {
@@ -105,6 +122,16 @@ const HomeProductPreview = () => {
   } else if (sortOption === "ratingLowHigh") {
     filteredProducts.sort((a, b) => a.rating - b.rating);
   }
+
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct,
+  );
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   return (
     <section id='services' className='services section light-background'>
@@ -238,9 +265,9 @@ const HomeProductPreview = () => {
 
         <div className='products-list'>
           {!isMobile || (!showFilters && filtersApplied) ? (
-            filteredProducts.length > 0 ? (
+            currentProducts.length > 0 ? (
               <div className='row gy-4'>
-                {filteredProducts.slice(0, 6).map((product, index) => (
+                {currentProducts.map((product, index) => (
                   <div
                     className='col-lg-4 col-md-6 col-6'
                     data-aos='fade-up'
@@ -270,25 +297,17 @@ const HomeProductPreview = () => {
           )}
         </div>
       </div>
-      {/* View More Button */}
-      {filteredProducts.length > 6 && (
-        <div style={{ textAlign: "center", marginTop: "20px" }}>
+
+      <div className='pagination'>
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
           <button
-            className='view-more-btn'
-            onClick={() => navigate("/productList")}
-            style={{
-              padding: "10px 20px",
-              backgroundColor: "#de4387",
-              color: "#fff",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-              fontSize: "16px",
-            }}>
-            View More
+            key={num}
+            onClick={() => paginate(num)}
+            className={`page-btn ${currentPage === num ? "active" : ""}`}>
+            {num}
           </button>
-        </div>
-      )}
+        ))}
+      </div>
     </section>
   );
 };
